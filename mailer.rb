@@ -27,8 +27,8 @@ def email_invoice_receipt(invoice)
   customer = Stripe::Customer.retrieve(invoice.customer)
 
   # Make sure to customize your from address
-  from_address = "MyApp Support <support@myapp.com>"
-  subject = "Your payment has been received"
+  from_address = "Weld <info@weld.io>"
+  subject = "Your Weld receipt [##{invoice.receipt_number}]"
 
   Pony.mail(
     :from => from_address,
@@ -52,17 +52,19 @@ end
 def payment_received_body(invoice, customer)
   subscription = invoice.lines.data[0]
   <<EOF
-Dear #{customer.email}:
+Dear #{customer.name}:
 
 This is a receipt for your subscription. This is only a receipt, 
 no payment is due. Thanks for your continued support!
 
 -------------------------------------------------
-SUBSCRIPTION RECEIPT - #{Time.now.strftime("%m/%d/%Y")}
+SUBSCRIPTION RECEIPT - #{Time.now.strftime("%m/%d/%Y")} - ##{invoice.receipt_number}
 
-Email: #{customer.email}
 Plan: #{subscription.plan.name}
-Amount: #{format_stripe_amount(invoice.total)} (USD)
+Subtotal: #{format_stripe_amount(invoice.subtotal)}
+VAT: #{format_stripe_amount(invoice.tax)}
+Total: #{format_stripe_amount(invoice.total)}
+Paid: #{format_stripe_amount(invoice.total)}
 
 For service between #{format_stripe_timestamp(subscription.period.start)} and #{format_stripe_timestamp(subscription.period.end)}
 
