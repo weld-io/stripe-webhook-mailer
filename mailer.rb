@@ -1,3 +1,4 @@
+# coding: utf-8
 require 'sinatra'
 require 'stripe'
 require 'json'
@@ -33,7 +34,6 @@ def email_invoice_receipt(invoice)
   # Make sure to customize your from address
   from_address = "Weld <info@weld.io>"
   subject = "Your Weld receipt [##{invoice.receipt_number}]"
-
   Pony.mail(
     :from => from_address,
     :to => customer.email,
@@ -56,10 +56,9 @@ end
 def payment_received_body(invoice, customer)
   subscription = invoice.lines.data[0]
   <<EOF
-Dear #{customer.name}:
+Dear #{customer.metadata.name}:
 
-This is a receipt for your subscription. This is only a receipt, 
-no payment is due. Thanks for your continued support!
+This is a receipt for your Weld subscription. It's already paid, no payment is due.
 
 -------------------------------------------------
 SUBSCRIPTION RECEIPT - #{Time.now.strftime("%m/%d/%Y")} - ##{invoice.receipt_number}
@@ -74,6 +73,8 @@ For service between #{format_stripe_timestamp(subscription.period.start)} and #{
 
 -------------------------------------------------
 
+Weld Your Own App AB, c/o SSE Business Lab, Saltmätargatan 19A, 11359 Stockholm, Sweden
+VAT identification number: SE556967716301
 EOF
 end
 
