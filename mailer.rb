@@ -21,6 +21,10 @@ post '/stripe-webhook-url' do
   end
 end
 
+get '/' do
+  "up and running!"
+end
+
 def email_invoice_receipt(invoice)
   puts "Emailing customer for invoice: #{invoice.id} amount: #{format_stripe_amount(invoice.total)}"
 
