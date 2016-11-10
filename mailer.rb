@@ -32,7 +32,7 @@ def email_invoice_receipt(invoice)
   customer = Stripe::Customer.retrieve(invoice.customer)
 
   # Make sure to customize your from address
-  from_address = "Weld <info@weld.io>"
+  from_address = "Weld <contact@weld.io>"
   subject = "Your Weld receipt [##{invoice.receipt_number}]"
   Pony.mail(
     :from => from_address,
