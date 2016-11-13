@@ -56,8 +56,6 @@ end
 def payment_received_body(invoice, customer)
   subscription = invoice.lines.data[0]
   <<EOF
-Dear #{customer.metadata.name}:
-
 This is a receipt for your Weld subscription. It's already paid, no payment is due.
 
 -------------------------------------------------
