@@ -33,10 +33,13 @@ def email_invoice_receipt(invoice)
 
   # Make sure to customize your from address
   from_address = "Weld <contact@weld.io>"
+  # Send a copy of all receipts for archiving
+  bcc_address = "customerreceipts@weld.io"
   subject = "Your Weld receipt [##{invoice.receipt_number}]"
   Pony.mail(
     :from => from_address,
     :to => customer.email,
+    :bcc => bcc_address,
     :subject => subject,
     :body => payment_received_body(invoice, customer),
     :via => :smtp,
